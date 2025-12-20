@@ -2,9 +2,9 @@ const { Router } = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { signupSchema, signinSchema } = require("../validators/userSchema");
-const { userModel } = require("../models/user");
+const userModel = require("../models/user");
 const userRouter = Router();
-const jwt_secret = process.env.JWT_SECRET;
+const jwt_secret = process.env.JWT_SECRET || "HELLO_ALL_HI";
 
 userRouter.post("/signup", async function (req, res) {
   try {
@@ -20,7 +20,7 @@ userRouter.post("/signup", async function (req, res) {
     const { email, password, firstName, lastName } = parsedData.data;
 
     //check if user exist already
-    const existingUser = await userModel.find({ email: email });
+    const existingUser = await userModel.findOne({ email: email });
     if (existingUser) {
       return res.status(409).json({
         message: " user already exists ",
@@ -28,7 +28,7 @@ userRouter.post("/signup", async function (req, res) {
     }
 
     //hashing the password using bcrypt
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     //saving the user data in db
     const user = await userModel.create({
       email: email,
@@ -36,10 +36,12 @@ userRouter.post("/signup", async function (req, res) {
       firstName: firstName,
       lastName: lastName,
     });
-    const token = jwt.sign({
-      userId: user._id,
-      jwt_secret,
-    });
+    const token = jwt.sign(
+      {
+        userId: user._id,
+      },
+      jwt_secret
+    );
     res.status(201).json({
       message: "user signedup successfully",
       token,
@@ -60,6 +62,7 @@ userRouter.post("/signin", async function (req, res) {
         errors: parsedData.error.errors,
       });
     }
+    const { email, password } = parsedData.data;
     //finding the user
     const user = await userModel.findOne({ email });
     if (!user) {
@@ -75,10 +78,12 @@ userRouter.post("/signin", async function (req, res) {
       });
     }
 
-    const token = jwt.sign({
-      userId: user._id,
-      jwt_secret,
-    });
+    const token = jwt.sign(
+      {
+        userId: user._id,
+      },
+      jwt_secret
+    );
 
     res.status(200).json({
       message: "user signed in successfully",
