@@ -7,6 +7,12 @@ const signupSchema = z.object({
   lastName: z.string().min(3),
 });
 
+const signinSchema = z.object({
+  email: z.email(),
+  password: z.string().min(6),
+});
+
 module.exports = {
   signupSchema,
+  signinSchema,
 };
