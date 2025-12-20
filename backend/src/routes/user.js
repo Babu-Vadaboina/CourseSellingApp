@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { signupSchema, signinSchema } = require("../validators/userSchema");
 const userModel = require("../models/user");
+const authMiddleware = require("../middlewares/authMiddleware");
 const userRouter = Router();
 const jwt_secret = process.env.JWT_SECRET || "HELLO_ALL_HI";
 
@@ -94,6 +95,12 @@ userRouter.post("/signin", async function (req, res) {
       message: "Internal server error",
     });
   }
+});
+userRouter.get("/me", authMiddleware, (req, res) => {
+  res.json({
+    message: "middleware auth working",
+    userId: req.userId,
+  });
 });
 
 module.exports = userRouter;
