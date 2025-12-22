@@ -45,7 +45,41 @@ adminRouter.post("/signup", async function (req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-adminRouter.post("/signin", function (req, res) {
+adminRouter.post("/signin", async function (req, res) {
+  try {
+    const parsedData = adminSigninSchema.safeParse(req.body);
+    if (!parsedData) {
+      return res.status(409).json({
+        message: "Invalid input",
+        errors: parsedData.error.errors,
+      });
+    }
+    const { email, password } = parsedData.data;
+
+    const admin = await adminModel.findOne({ email });
+    if (!admin) {
+      res.status(401).send({
+        message: "Invalid email or pwd",
+      });
+    }
+
+    const passwordMatch = await bcrypt.compare(admin.password, password);
+    if (!passwordMatch) {
+      res.status(401).json({
+        message: " Invalid password",
+      });
+    }
+    const token = jwt.sign({ adminId: admin._id, role: "admin" }, jwt_secret);
+
+    res.status(201).json({
+      message: "signedin successfully",
+      token,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: " Internal server error",
+    });
+  }
   res.json({
     message: "signedin successfully",
   });
