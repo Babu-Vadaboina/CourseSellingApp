@@ -7,6 +7,7 @@ const {
 } = require("../validators/adminSchema");
 const adminRouter = Router();
 const adminModel = require("../models/admin");
+const adminMiddleware = require("../middlewares/adminMiddleware");
 const jwt_secret = process.env.JWT_SECRET;
 
 adminRouter.post("/signup", async function (req, res) {
@@ -81,7 +82,12 @@ adminRouter.post("/signin", async function (req, res) {
     });
   }
 });
-
+adminRouter.get("/test", adminMiddleware, (req, res) => {
+  res.status(200).json({
+    message: " testing admin middleware",
+    adminId: req.adminId,
+  });
+});
 adminRouter.get("/course", function (req, res) {
   res.json({
     message: "endpoint for getting course details",
