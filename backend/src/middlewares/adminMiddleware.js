@@ -10,7 +10,8 @@ const adminMiddleware = (req, res, next) => {
     }
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (!decoded.role == "admin") {
+    //console.log(decoded.role);
+    if (!decoded || decoded.role !== "admin") {
       return res.status(403).json({
         message: "Admin Access only",
       });
