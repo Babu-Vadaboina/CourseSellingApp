@@ -12,7 +12,7 @@ const jwt_secret = process.env.JWT_SECRET;
 adminRouter.post("/signup", async function (req, res) {
   try {
     const parsedData = adminSignupSchema.safeParse(req.body);
-    if (!parsedData) {
+    if (!parsedData.success) {
       return res.status(400).json({
         message: "invalid input",
         errors: parsedData.error.errors,
@@ -48,7 +48,7 @@ adminRouter.post("/signup", async function (req, res) {
 adminRouter.post("/signin", async function (req, res) {
   try {
     const parsedData = adminSigninSchema.safeParse(req.body);
-    if (!parsedData) {
+    if (!parsedData.success) {
       return res.status(409).json({
         message: "Invalid input",
         errors: parsedData.error.errors,
@@ -58,14 +58,14 @@ adminRouter.post("/signin", async function (req, res) {
 
     const admin = await adminModel.findOne({ email });
     if (!admin) {
-      res.status(401).send({
+      return res.status(401).send({
         message: "Invalid email or pwd",
       });
     }
 
-    const passwordMatch = await bcrypt.compare(admin.password, password);
+    const passwordMatch = await bcrypt.compare(password, admin.password);
     if (!passwordMatch) {
-      res.status(401).json({
+      return res.status(401).json({
         message: " Invalid password",
       });
     }
@@ -80,9 +80,6 @@ adminRouter.post("/signin", async function (req, res) {
       message: " Internal server error",
     });
   }
-  res.json({
-    message: "signedin successfully",
-  });
 });
 
 adminRouter.get("/course", function (req, res) {
