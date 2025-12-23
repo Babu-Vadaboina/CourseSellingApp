@@ -90,16 +90,16 @@ adminRouter.get("/test", adminMiddleware, (req, res) => {
     adminId: req.adminId,
   });
 });
-adminRouter.get("/course", adminMiddleware, async function (req, res) {
+adminRouter.post("/course", adminMiddleware, async function (req, res) {
   try {
     const parsedData = courseSchema.safeParse(req.body);
     if (!parsedData.success) {
       return res.status(400).json({
         message: "Invalid input",
-        errors: parsed.error.errors,
+        errors: parsedData.error.errors,
       });
     }
-    const { title, description, price, imageUrl, published } = parsed.data;
+    const { title, description, price, imageUrl, published } = parsedData.data;
     const course = await courseModel.create({
       title,
       description,
@@ -120,13 +120,13 @@ adminRouter.get("/course", adminMiddleware, async function (req, res) {
   }
 });
 
-adminRouter.post("/course", function (req, res) {
+adminRouter.post("/course-update", function (req, res) {
   res.json({
     message: "endpoint for the creating a course",
   });
 });
 
-adminRouter.put("/course", function (req, res) {
+adminRouter.put("/course-delete", function (req, res) {
   res.json({
     message: "endpoint for updating a course details",
   });
