@@ -119,7 +119,14 @@ adminRouter.post("/course", adminMiddleware, async function (req, res) {
     });
   }
 });
-
+adminRouter.get("/courses", adminMiddleware, async function (req, res) {
+  const courses = await courseModel.find({
+    creatorId: req.adminId,
+  });
+  res.json({
+    courses,
+  });
+});
 adminRouter.post("/course-update", function (req, res) {
   res.json({
     message: "endpoint for the creating a course",
