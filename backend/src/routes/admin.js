@@ -8,6 +8,8 @@ const {
 const adminRouter = Router();
 const adminModel = require("../models/admin");
 const adminMiddleware = require("../middlewares/adminMiddleware");
+const courseSchema = require("../validators/courseSchema");
+const courseModel = require("../models/course");
 const jwt_secret = process.env.JWT_SECRET;
 
 adminRouter.post("/signup", async function (req, res) {
@@ -88,10 +90,34 @@ adminRouter.get("/test", adminMiddleware, (req, res) => {
     adminId: req.adminId,
   });
 });
-adminRouter.get("/course", function (req, res) {
-  res.json({
-    message: "endpoint for getting course details",
-  });
+adminRouter.get("/course", adminMiddleware, async function (req, res) {
+  try {
+    const parsedData = courseSchema.safeParse(req.body);
+    if (!parsedData.success) {
+      return res.status(400).json({
+        message: "Invalid input",
+        errors: parsed.error.errors,
+      });
+    }
+    const { title, description, price, imageUrl, published } = parsed.data;
+    const course = await courseModel.create({
+      title,
+      description,
+      price,
+      imageUrl,
+      published: published ?? false,
+      creatorId: req.adminId,
+    });
+    res.status(201).json({
+      message: "Course created successfully",
+      course,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 });
 
 adminRouter.post("/course", function (req, res) {
