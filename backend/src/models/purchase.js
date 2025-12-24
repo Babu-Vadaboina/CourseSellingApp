@@ -18,4 +18,6 @@ const purchaseSchema = new mongoose.Schema(
 );
 
 purchaseSchema.index({ userId: 1, courseId: 1 }, { unique: true });
-module.exports = mongoose.model("purchase", purchaseSchema);
+
+const purchaseModel = mongoose.model("purchase", purchaseSchema);
+module.exports = purchaseModel;

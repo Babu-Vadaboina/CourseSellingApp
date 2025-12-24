@@ -4,6 +4,10 @@ const jwt = require("jsonwebtoken");
 const { signupSchema, signinSchema } = require("../validators/userSchema");
 const userModel = require("../models/user");
 const authMiddleware = require("../middlewares/authMiddleware");
+const purchaseSchema = require("../validators/purchaseSchema");
+const courseModel = require("../models/course");
+const purchase = require("../models/purchase");
+const purchaseModel = require("../models/purchase");
 const userRouter = Router();
 const jwt_secret = process.env.JWT_SECRET || "HELLO_ALL_HI";
 
@@ -101,6 +105,44 @@ userRouter.get("/me", authMiddleware, (req, res) => {
     message: "middleware auth working",
     userId: req.userId,
   });
+});
+
+userRouter.post("/purchase", authMiddleware, async (req, res) => {
+  try {
+    const parsedData = purchaseSchema.safeParse(req.body);
+    if (!parsedData.success) {
+      return res.status(401).json({
+        message: " Invalid purchase input",
+        errors: parsedData.error.errors,
+      });
+    }
+    const { courseId } = parsedData.data;
+
+    const course = await courseModel.findOne({
+      courseId,
+    });
+    if (!course) {
+      return res.status(404).json({
+        message: "Course not found",
+      });
+    }
+    await purchaseModel.create({
+      userId: req.userId,
+      courseId,
+    });
+    res.status(201).json({
+      message: "Course purchased successfully",
+    });
+  } catch (err) {
+    if (err.code == 11000) {
+      return res.status(409).json({
+        message: "course already purchased",
+      });
+    }
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 });
 
 module.exports = userRouter;
