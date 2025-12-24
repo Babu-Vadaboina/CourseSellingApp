@@ -145,4 +145,23 @@ userRouter.post("/purchase", authMiddleware, async (req, res) => {
   }
 });
 
+userRouter.get("/purchases", authMiddleware, async (req, res) => {
+  try {
+    const purchases = await purchaseModel
+      .findOne({
+        userId: req.userId,
+      })
+      .populate("courseId");
+
+    const courses = purchases.map((p) => {
+      p.courseId;
+    });
+    res.json({ courses });
+  } catch (err) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
 module.exports = userRouter;
