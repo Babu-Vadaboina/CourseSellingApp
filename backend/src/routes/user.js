@@ -8,6 +8,7 @@ const purchaseSchema = require("../validators/purchaseSchema");
 const courseModel = require("../models/course");
 const purchase = require("../models/purchase");
 const purchaseModel = require("../models/purchase");
+const { boolean } = require("zod");
 const userRouter = Router();
 const jwt_secret = process.env.JWT_SECRET || "HELLO_ALL_HI";
 
@@ -119,7 +120,7 @@ userRouter.post("/purchase", authMiddleware, async (req, res) => {
     const { courseId } = parsedData.data;
 
     const course = await courseModel.findOne({
-      courseId,
+      _id: courseId,
     });
     if (!course) {
       return res.status(404).json({
@@ -148,15 +149,14 @@ userRouter.post("/purchase", authMiddleware, async (req, res) => {
 userRouter.get("/purchases", authMiddleware, async (req, res) => {
   try {
     const purchases = await purchaseModel
-      .findOne({
+      .find({
         userId: req.userId,
       })
       .populate("courseId");
 
-    const courses = purchases.map((p) => {
-      p.courseId;
-    });
-    res.json({ courses });
+    const courses = purchases.map((p) => p.courseId).filter(Boolean);
+
+    return res.status(200).json({ courses });
   } catch (err) {
     res.status(500).json({
       message: "Internal server error",

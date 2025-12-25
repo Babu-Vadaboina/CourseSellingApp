@@ -5,7 +5,9 @@ const courseRouter = Router();
 
 courseRouter.get("/", async function (req, res) {
   try {
-    const courses = await courseModel.find({ published: true });
+    const courses = await courseModel
+      .find({ published: true })
+      .select("title description price imageUrl");
     res.json({ courses });
   } catch (err) {
     res.status(500).json({
@@ -16,10 +18,12 @@ courseRouter.get("/", async function (req, res) {
 
 courseRouter.get("/:courseId", async function (req, res) {
   try {
-    const course = await courseModel.findOne({
-      _Id: req.params.courseId,
-      published: true,
-    });
+    const course = await courseModel
+      .findOne({
+        _id: req.params.courseId,
+        published: true,
+      })
+      .select("title description price imageUrl");
     if (!course) {
       return res.status(404).json({
         message: "Course not found",

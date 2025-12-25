@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { refine } = require("../validators/courseSchema");
 
 const purchaseSchema = new mongoose.Schema(
   {
