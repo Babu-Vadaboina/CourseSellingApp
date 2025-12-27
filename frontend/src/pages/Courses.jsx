@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import CourseCard from "../components/CourseCard";
+import CourseCard from "../components/coursecard";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
