@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import CourseCard from "../components/coursecard";
+import CourseCard from "../components/CourseCard";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
@@ -17,6 +17,7 @@ export default function Courses() {
       {courses.map((course) => (
         <CourseCard key={course._id} course={course} />
       ))}
+      <h1>courses should be rendered above</h1>
     </div>
   );
 }

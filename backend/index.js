@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 require("dotenv").config();
 const connectDB = require("./src/config/db");
 
@@ -6,6 +7,13 @@ const userRouter = require("./src/routes/user");
 const adminRouter = require("./src/routes/admin");
 const courseRouter = require("./src/routes/course");
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
