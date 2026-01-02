@@ -12,6 +12,17 @@ export default function CourseDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const handlePurchase = async () => {
+    try {
+      await api.post("/user/purchase", { courseId: course._id });
+      alert("Course Purchased Successfully");
+      navigate("/purchases");
+    } catch (err) {
+      console.log(err);
+      alert(err.response?.data?.message || "Purchase failed");
+    }
+  };
+
   useEffect(() => {
     api
       .get(`/courses/${id}`)
@@ -49,13 +60,3 @@ export default function CourseDetails() {
     </div>
   );
 }
-
-const handlePurchase = async () => {
-  try {
-    await api.post("/user/purchase", { courseId: course._id });
-    alert("Course Purchased Successfully");
-    navigate("/purchases");
-  } catch (err) {
-    alert(err.response?.data?.message || "Purchase failed");
-  }
-};
