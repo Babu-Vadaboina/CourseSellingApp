@@ -14,7 +14,7 @@ export default function CourseDetails() {
 
   useEffect(() => {
     api
-      .get(`/courses/:{id}`)
+      .get(`/courses/${id}`)
       .then((res) => {
         setCourse(res.data.course);
         setLoading(false);
@@ -50,7 +50,7 @@ export default function CourseDetails() {
   );
 }
 
-async function handlePurchase() {
+const handlePurchase = async () => {
   try {
     await api.post("/user/purchase", { courseId: course._id });
     alert("Course Purchased Successfully");
@@ -58,4 +58,4 @@ async function handlePurchase() {
   } catch (err) {
     alert(err.response?.data?.message || "Purchase failed");
   }
-}
+};
