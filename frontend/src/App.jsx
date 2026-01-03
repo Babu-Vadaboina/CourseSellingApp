@@ -13,6 +13,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import CreateCourse from "./pages/admin/CreateCourse";
 import AdminCourses from "./pages/admin/AdminCourses";
 import EditCourse from "./pages/admin/EditCourse";
+import AdminSignup from "./pages/admin/AdminSignup";
+import AdminHome from "./pages/admin/AdminHome";
 
 function App() {
   return (
@@ -26,7 +28,10 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/purchases" element={<Purchases />} />
           {/* admin routes */}
+
+          <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/signin" element={<AdminSignin />} />
+          <Route path="/admin/signup" element={<AdminSignup />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/create-course" element={<CreateCourse />} />
           <Route path="/admin/courses" element={<AdminCourses />} />
