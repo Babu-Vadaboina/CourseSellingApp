@@ -17,7 +17,6 @@ export default function Courses() {
       {courses.map((course) => (
         <CourseCard key={course._id} course={course} />
       ))}
-      <h1>courses should be rendered above</h1>
     </div>
   );
 }
