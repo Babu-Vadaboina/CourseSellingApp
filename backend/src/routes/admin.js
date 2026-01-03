@@ -133,7 +133,7 @@ adminRouter.put(
   async function (req, res) {
     try {
       const courseId = req.params.courseId;
-      const updated = await Course.findOneAndUpdate(
+      const updated = await courseModel.findOneAndUpdate(
         { _id: courseId, creatorId: req.adminId },
         req.body,
         { new: true }
