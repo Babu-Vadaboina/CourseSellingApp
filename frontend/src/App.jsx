@@ -7,7 +7,7 @@ import CourseDetails from "./pages/CourseDetails";
 import Signin from "./pages/Signin";
 import Purchases from "./pages/Purchases";
 //import Signup from "./pages/Signup";
-//import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -15,6 +15,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Courses />} />
           <Route path="/course/:id" element={<CourseDetails />} />
