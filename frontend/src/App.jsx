@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
 import AdminSignin from "./pages/admin/AdminSignin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import CreateCourse from "./pages/admin/CreateCourse";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           {/* admin routes */}
           <Route path="/admin/signin" element={<AdminSignin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/create-course" element={<CreateCourse />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

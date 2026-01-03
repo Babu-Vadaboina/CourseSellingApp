@@ -17,7 +17,7 @@ export default function AdminSigin() {
         password,
       });
       signin(res.data.token);
-      Navigate("/admin/dashboard");
+      navigate("/admin/dashboard");
     } catch (err) {
       console.log(err);
       alert("Admin signin failed");
