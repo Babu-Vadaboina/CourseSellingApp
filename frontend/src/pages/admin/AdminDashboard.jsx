@@ -19,6 +19,12 @@ export default function AdminDashboard() {
       >
         Create New Course
       </Link>
+      <Link
+        to="/admin/courses"
+        className="inline-block bg-gray-800 text-white px-4 py-2 rounded mr-4"
+      >
+        View My Courses
+      </Link>
     </div>
   );
 }

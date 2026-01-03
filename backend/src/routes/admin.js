@@ -157,10 +157,27 @@ adminRouter.put(
   }
 );
 
-adminRouter.put("/course-delete", function (req, res) {
-  res.json({
-    message: "endpoint for updating a course details",
-  });
+adminRouter.delete("/course/:courseId", adminMiddleware, async (req, res) => {
+  try {
+    const deleted = await Course.findOneAndDelete({
+      _id: req.params.courseId,
+      creatorId: req.adminId, // ownership check
+    });
+
+    if (!deleted) {
+      return res.status(404).json({
+        message: "Course not found or unauthorized",
+      });
+    }
+
+    res.json({
+      message: "Course deleted successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Internal server error in deleting course",
+    });
+  }
 });
 
 module.exports = adminRouter;
