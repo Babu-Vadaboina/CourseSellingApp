@@ -9,10 +9,9 @@ import Purchases from "./pages/Purchases";
 import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
 import AdminSignin from "./pages/admin/AdminSignin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -25,6 +24,7 @@ function App() {
           <Route path="/purchases" element={<Purchases />} />
           {/* admin routes */}
           <Route path="/admin/signin" element={<AdminSignin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
