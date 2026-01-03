@@ -127,11 +127,35 @@ adminRouter.get("/courses", adminMiddleware, async function (req, res) {
     courses,
   });
 });
-adminRouter.post("/course-update", function (req, res) {
-  res.json({
-    message: "endpoint for the creating a course",
-  });
-});
+adminRouter.put(
+  "/course/:courseId",
+  adminMiddleware,
+  async function (req, res) {
+    try {
+      const courseId = req.params.courseId;
+      const updated = await Course.findOneAndUpdate(
+        { _id: courseId, creatorId: req.adminId },
+        req.body,
+        { new: true }
+      );
+
+      if (!updated) {
+        return res.status(404).json({
+          message: "Course not found or unauthorized",
+        });
+      }
+
+      res.json({
+        message: "Course updated successfully",
+        course: updated,
+      });
+    } catch (err) {
+      res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  }
+);
 
 adminRouter.put("/course-delete", function (req, res) {
   res.json({
