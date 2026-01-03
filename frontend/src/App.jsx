@@ -12,6 +12,7 @@ import AdminSignin from "./pages/admin/AdminSignin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import CreateCourse from "./pages/admin/CreateCourse";
 import AdminCourses from "./pages/admin/AdminCourses";
+import EditCourse from "./pages/admin/EditCourse";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/create-course" element={<CreateCourse />} />
           <Route path="/admin/courses" element={<AdminCourses />} />
+          <Route path="/admin/edit-course/:id" element={<EditCourse />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
