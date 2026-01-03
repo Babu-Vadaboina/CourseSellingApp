@@ -32,7 +32,8 @@ export default function Signup() {
       {["firstName", "lastName", "email", "password"].map((field) => (
         <input
           key={field}
-          placeholder={field}
+          value={form[field]}
+          placeholder={field.replace(/([A-Z])/g, " $1")}
           type={field === "password" ? "password" : "text"}
           className="w-full border p-2 mb-3"
           onChange={(e) => setForm({ ...form, [field]: e.target.value })}

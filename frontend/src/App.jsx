@@ -8,6 +8,7 @@ import Signin from "./pages/Signin";
 import Purchases from "./pages/Purchases";
 import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
+import AdminSignin from "./pages/admin/AdminSignin";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,6 +23,8 @@ function App() {
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/purchases" element={<Purchases />} />
+          {/* admin routes */}
+          <Route path="/admin/signin" element={<AdminSignin />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
