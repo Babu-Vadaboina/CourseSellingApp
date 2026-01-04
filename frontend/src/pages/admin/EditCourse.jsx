@@ -20,11 +20,11 @@ export default function EditCourse() {
       .then((res) => {
         const c = res.data.course;
         setForm({
-          title: c.title,
-          description: c.description,
-          price: c.price,
-          imageUrl: c.imageUrl || "",
-          published: c.published,
+          title: c.title ?? "",
+          description: c.description ?? "",
+          price: c.price ?? "",
+          imageUrl: c.imageUrl ?? "",
+          published: c.published ?? false,
         });
       })
       .catch(() => alert("Failed to load course"));
