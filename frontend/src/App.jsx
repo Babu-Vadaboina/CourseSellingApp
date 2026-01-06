@@ -32,10 +32,38 @@ function App() {
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/signin" element={<AdminSignin />} />
           <Route path="/admin/signup" element={<AdminSignup />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/create-course" element={<CreateCourse />} />
-          <Route path="/admin/courses" element={<AdminCourses />} />
-          <Route path="/admin/edit-course/:id" element={<EditCourse />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/create-course"
+            element={
+              <AdminRoute>
+                <CreateCourse />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/courses"
+            element={
+              <AdminRoute>
+                <AdminCourses />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/edit-course/:id"
+            element={
+              <AdminRoute>
+                <EditCourse />
+              </AdminRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
