@@ -15,6 +15,7 @@ import AdminCourses from "./pages/admin/AdminCourses";
 import EditCourse from "./pages/admin/EditCourse";
 import AdminSignup from "./pages/admin/AdminSignup";
 import AdminHome from "./pages/admin/AdminHome";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
   return (

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
-  const { token, signout } = useAuth();
+  const { token, signout, role } = useAuth();
   const navigate = useNavigate();
   return (
     <nav className="flex justify-between items-center px-6 py-4 border-b">
@@ -21,6 +21,7 @@ export default function Navbar() {
             <Link to="/signup">Signup</Link>
           </>
         )}
+        {role === "admin" && <Link to="/admin/dashboard">Admin</Link>}
 
         {token && (
           <>
