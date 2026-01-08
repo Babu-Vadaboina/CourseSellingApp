@@ -12,16 +12,41 @@ export default function CourseDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const handlePurchase = async () => {
+  async function handlePurchase() {
     try {
-      await api.post("/user/purchase", { courseId: course._id });
-      alert("Course Purchased Successfully");
-      navigate("/purchases");
+      // 1️⃣ Create order
+      const res = await api.post("/user/purchase/order", {
+        courseId: course._id,
+      });
+
+      const options = {
+        key: res.data.razorpayKey,
+        amount: res.data.amount,
+        currency: res.data.currency,
+        name: "Evolyte",
+        description: course.title,
+        order_id: res.data.orderId,
+        handler: async function (response) {
+          // 2️⃣ Verify payment
+          await api.post("/user/purchase/verify", {
+            ...response,
+            courseId: course._id,
+          });
+
+          alert("Payment successful!");
+          navigate("/purchases");
+        },
+        theme: {
+          color: "#000000",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (err) {
-      console.log(err);
-      alert(err.response?.data?.message || "Purchase failed");
+      alert("Payment failed");
     }
-  };
+  }
 
   useEffect(() => {
     api
