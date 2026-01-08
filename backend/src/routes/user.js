@@ -109,43 +109,43 @@ userRouter.get("/me", authMiddleware, (req, res) => {
   });
 });
 
-userRouter.post("/purchase", authMiddleware, async (req, res) => {
-  try {
-    const parsedData = purchaseSchema.safeParse(req.body);
-    if (!parsedData.success) {
-      return res.status(401).json({
-        message: " Invalid purchase input",
-        errors: parsedData.error.errors,
-      });
-    }
-    const { courseId } = parsedData.data;
+// userRouter.post("/purchase", authMiddleware, async (req, res) => {
+//   try {
+//     const parsedData = purchaseSchema.safeParse(req.body);
+//     if (!parsedData.success) {
+//       return res.status(401).json({
+//         message: " Invalid purchase input",
+//         errors: parsedData.error.errors,
+//       });
+//     }
+//     const { courseId } = parsedData.data;
 
-    const course = await courseModel.findOne({
-      _id: courseId,
-    });
-    if (!course) {
-      return res.status(404).json({
-        message: "Course not found",
-      });
-    }
-    await purchaseModel.create({
-      userId: req.userId,
-      courseId,
-    });
-    res.status(201).json({
-      message: "Course purchased successfully",
-    });
-  } catch (err) {
-    if (err.code == 11000) {
-      return res.status(409).json({
-        message: "course already purchased",
-      });
-    }
-    res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-});
+//     const course = await courseModel.findOne({
+//       _id: courseId,
+//     });
+//     if (!course) {
+//       return res.status(404).json({
+//         message: "Course not found",
+//       });
+//     }
+//     await purchaseModel.create({
+//       userId: req.userId,
+//       courseId,
+//     });
+//     res.status(201).json({
+//       message: "Course purchased successfully",
+//     });
+//   } catch (err) {
+//     if (err.code == 11000) {
+//       return res.status(409).json({
+//         message: "course already purchased",
+//       });
+//     }
+//     res.status(500).json({
+//       message: "Internal server error",
+//     });
+//   }
+// });
 
 userRouter.get("/purchases", authMiddleware, async (req, res) => {
   try {
@@ -204,3 +204,24 @@ userRouter.post("/purchase/verify", authMiddleware, async (req, res) => {
   }
 });
 module.exports = userRouter;
+
+userRouter.post("/purchase/order", authMiddleware, async (req, res) => {
+  const { courseId } = req.body;
+
+  const course = await courseModel.findById(courseId);
+  if (!course) {
+    return res.status(404).json({ message: "Course not found" });
+  }
+
+  const order = await razorpay.orders.create({
+    amount: course.price * 100,
+    currency: "INR",
+  });
+
+  res.json({
+    orderId: order.id,
+    amount: order.amount,
+    currency: order.currency,
+    razorpayKey: process.env.RAZORPAY_KEY_ID,
+  });
+});
