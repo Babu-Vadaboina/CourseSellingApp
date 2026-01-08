@@ -11,6 +11,7 @@ const purchaseModel = require("../models/purchase");
 const { boolean } = require("zod");
 const userRouter = Router();
 const jwt_secret = process.env.JWT_SECRET || "HELLO_ALL_HI";
+const crypto = require("crypto");
 
 userRouter.post("/signup", async function (req, res) {
   try {
@@ -164,4 +165,42 @@ userRouter.get("/purchases", authMiddleware, async (req, res) => {
   }
 });
 
+userRouter.post("/purchase/verify", authMiddleware, async (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      courseId,
+    } = req.body;
+    const body = `${razorpay_order_id}|${razorpay_payment_id}`;
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body)
+      .digest("hex");
+
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({
+        message: "Payment verification failed",
+      });
+    }
+    await purchaseModel.create({
+      userId: req.userId,
+      courseId,
+    });
+    res.json({
+      message: "Payment successful, course unlocked",
+    });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({
+        message: "Course already purchased",
+      });
+    }
+
+    res.status(500).json({
+      message: "Payment verification failed",
+    });
+  }
+});
 module.exports = userRouter;
