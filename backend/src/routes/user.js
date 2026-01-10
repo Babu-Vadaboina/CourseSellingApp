@@ -12,6 +12,7 @@ const { boolean } = require("zod");
 const userRouter = Router();
 const jwt_secret = process.env.JWT_SECRET || "HELLO_ALL_HI";
 const crypto = require("crypto");
+const razorpay = require("../config/razorpay");
 
 userRouter.post("/signup", async function (req, res) {
   try {
