@@ -1,6 +1,24 @@
 @import "tailwindcss";
-
+:root {
+  --page-bg: #f6f7fb;
+}
 body {
-  background-color: #84a1d2;
-  font-family: "Inter", sans-serif;
+  background: var(--page-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* small utility for truncating descriptions (if tailwind line-clamp plugin not present) */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ensure cards keep consistent image area */
+.course-image {
+  aspect-ratio: 16/9;
+  object-fit: cover;
 }
